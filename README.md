@@ -17,7 +17,6 @@ This repository contains a collection of AI-powered applications and services de
 
     ```bash
     export PROJECT_ID=<your-gcp-project-id>
-    export PROJECT_NUMBER=$(gcloud projects describe $PROJECT_ID --format="value(projectNumber)")
     export REGION=us-central1
 
     cd terraform
@@ -27,8 +26,8 @@ This repository contains a collection of AI-powered applications and services de
 
     ```bash
     sed -i \
-    -e "s/your-gcp-project-id/$PROJECT_ID/"
-    -e "s/your-region/$REGION/"
+    -e "s/your-gcp-project-id/$PROJECT_ID/" \
+    -e "s/your-region/$REGION/" \
     terraform.tfvars
     ```
 
