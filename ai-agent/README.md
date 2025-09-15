@@ -75,7 +75,7 @@ The following resources are created by Terraform:
     terraform apply
     ```
 
-    Take note of the outputs, especially the `service_account_email`.
+    Take note of the outputs.
     ```
     Outputs:
 
@@ -89,7 +89,9 @@ The following resources are created by Terraform:
 1.  **Set up environment variables from terraform output**
 
     ```bash
-    export VPC_NAME=run-ai-agent-vpc
+    cd ..
+
+    export NETWORK_NAME=run-ai-agent-vpc
     export SUBNET_NAME=run-ai-agent-subnet
     export SERVICE_ACCOUNT=run-ai-agent-sa
     ```
@@ -97,13 +99,12 @@ The following resources are created by Terraform:
 2.  **Deploy the Zoo MCP Server:**
 
     ```bash
-    cd ..
     gcloud run deploy zoo-mcp-server \
         --source ./zoo-mcp-server/ \
         --region ${REGION} \
         --service-account ${SERVICE_ACCOUNT} \
         --no-allow-unauthenticated \
-        --network=${VPC_NAME} \
+        --network=${NETWORK_NAME} \
         --subnet=${SUBNET_NAME} \
         --vpc-egress=all-traffic \
         --ingress internal
@@ -137,7 +138,7 @@ The following resources are created by Terraform:
     gcloud run services update zoo-tour-guide \
       --region=${REGION} \
       --service-account ${SERVICE_ACCOUNT} \
-      --network=${VPC_NAME} \
+      --network=${NETWORK_NAME} \
       --subnet=${SUBNET_NAME}  \
       --vpc-egress=all-traffic
     ```
