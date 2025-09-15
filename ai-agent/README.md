@@ -4,7 +4,7 @@
 
 This project provides a comprehensive setup for deploying a sophisticated AI agent on Google Cloud. The agent is designed to be a "Zoo Tour Guide," capable of answering questions about animals in a fictional zoo. It leverages a custom-built MCP (Multi-turn Conversation Platform) server for zoo-specific data and Wikipedia for general knowledge. The entire infrastructure is managed using Terraform, and the agent is deployed on Cloud Run.
 
-![ai-agent-design](images/design.png)
+![ai-agent-design](../images/ai-agent-design.png)
 
 ## Getting Started
 
@@ -18,13 +18,14 @@ This project provides a comprehensive setup for deploying a sophisticated AI age
 1.  **Set up environment variables from Terraform output:**
 
     ```bash
-    cd ./ai-agent
+    cd ~/run-ai-apps/ai-agent
 
-    export PROJECT_ID=<your-gcp-project-id>
+    export PROJECT_ID=<your-gcp-project-id>      
+    # Your GCP user name, can check via `gcloud auth list`
+    export MEMBER=<your-gcp-user-name>
+
     export REGION=us-central1
-
-    export PROJECT_NUMBER=$(gcloud projects describe $PROJECT_ID --format="value(projectNumber)")
-    export UserName=<your-gcp-project-id>
+    export PROJECT_NUMBER=$(gcloud projects describe $PROJECT_ID --format="value(projectNumber)")  
 
     export NETWORK_NAME=run-ai-apps-network
     export SUBNET_NAME=run-ai-apps-subnet
@@ -33,7 +34,7 @@ This project provides a comprehensive setup for deploying a sophisticated AI age
 
 2.  **Grant Deployer Permissions (One-time setup for your account):**
 
-The user account running `gcloud run deploy` needs permissions to deploy services, assign service accounts, and use Cloud Build behind the scenes. Run the following commands to grant these roles to your currently logged-in `gcloud` user.
+    The user account running `gcloud run deploy` needs permissions to deploy services, assign service accounts, and use Cloud Build behind the scenes. Run the following commands to grant these roles to your currently logged-in `gcloud` user.
 
     ```bash
     # Grant permissions to deploy and manage Cloud Run services
@@ -110,7 +111,7 @@ The user account running `gcloud run deploy` needs permissions to deploy service
 For detailed usage instructions, follow the codelab:
 https://codelabs.developers.google.com/codelabs/cloud-run/use-mcp-server-on-cloud-run-with-an-adk-agent#8
 
-![AI Agent UI](images/result.png)
+![AI Agent UI](../images/ai-agent-result.png)
 
 ## AI Agent Source Code References 
 

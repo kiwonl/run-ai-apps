@@ -131,7 +131,6 @@ ZOO_ANIMALS = [
         "age": 10,
         "enclosure": "The Grizzly Gulch",
         "trail": "Polar Path",
-which
     },
     {
         "species": "bear",

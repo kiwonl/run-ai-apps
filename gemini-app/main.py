@@ -84,7 +84,7 @@ def movie_recommendations():
 def index():
     # Renders the index page.
     return render_template(
-        "index-v1.html", revision=os.getenv("K_REVISION"), region=os.getenv("REGION")
+        "index.html", revision=os.getenv("K_REVISION"), region=os.getenv("REGION")
     )
 
 

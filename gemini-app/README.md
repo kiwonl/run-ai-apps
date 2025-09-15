@@ -6,6 +6,8 @@ This project is a movie recommendation web application that uses Google's Gemini
 
 The application is designed to be deployed on **Google Cloud Run**.
 
+![gemini-app-design](../images/gemini-app-design.png)
+
 ## Getting Started
 
 ### Prerequisites
@@ -17,11 +19,14 @@ The application is designed to be deployed on **Google Cloud Run**.
 1.  **Set deployment environment variables:**
 
     ```bash
-    cd ../gemini-app
+    cd ~/run-ai-apps/gemini-app/
 
-    export PROJECT_ID=<your-gcp-project-id>
-    export PROJECT_NUMBER=$(gcloud projects describe $PROJECT_ID --format="value(projectNumber)")
+    export PROJECT_ID=<your-gcp-project-id>      
+    # Your GCP user name, can check via `gcloud auth list`
+    export MEMBER=<your-gcp-user-name>
+
     export REGION=us-central1
+    export PROJECT_NUMBER=$(gcloud projects describe $PROJECT_ID --format="value(projectNumber)")  
 
     export NETWORK_NAME=run-ai-apps-network
     export SUBNET_NAME=run-ai-apps-subnet
@@ -58,15 +63,15 @@ Once deployed, `gcloud` will provide a service URL. Use this URL to test the API
     export ENDPOINT=<service-url-from-gcloud-output>
     ```
 
+    ![gemini-app-design](../images/gemini-app-result.png)
+
 2.  **Send a test request using `curl`:**
 
     ```bash
-    curl -X POST -H "Content-Type: application/json" -d 
-    {
+    curl -X POST -H "Content-Type: application/json" -d '{
       "movies": ["Demon Slayer: Kimetsu no Yaiba The Movie: Infinity Castle", "KPop Demon Hunters"],
       "scenario": "가족들과 함께 보기 좋은"
-    }
-    " $ENDPOINT/recommendations"
+    }' "$ENDPOINT/recommendations"
     ```
 
     You should receive a JSON response with a movie recommendation.
