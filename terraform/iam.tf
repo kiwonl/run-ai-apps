@@ -19,26 +19,31 @@ resource "google_project_iam_member" "run_invoker" {
   member  = "serviceAccount:${google_service_account.sa.email}"
 }
 
+# Cloud Build 를 위한 Service Account
+data "google_project_service_identity" "cloudbuild_sa" {
+  provider = google
+  project  = var.project_id
+  service  = "cloudbuild.googleapis.com"
+}
+
 # Cloud Build SA 에 권한 추가 - Cloud Run Administrator
 resource "google_project_iam_member" "cloud_build_run_admin" {
   project = var.project_id
   role    = "roles/run.admin"
-  member  = "serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"
-  depends_on = [google_project_service.default["cloudbuild.googleapis.com"]]
+  member  = "serviceAccount:${data.google_project_service_identity.cloudbuild_sa.email}"
 }
 
 # Cloud Build SA 에 권한 추가 - ServiceAccountUser
 resource "google_project_iam_member" "cloud_build_service_account_user" {
   project = var.project_id
   role    = "roles/iam.serviceAccountUser"
-  member  = "serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"
-  depends_on = [google_project_service.default["cloudbuild.googleapis.com"]]
+  member  = "serviceAccount:${data.google_project_service_identity.cloudbuild_sa.email}"
 }
 
+# Cloud Build SA 에 권
 # Cloud Build SA 에 권한 추가 - Cloud Build Builder
 resource "google_project_iam_member" "cloud_build_builds_builder" {
   project = var.project_id
   role    = "roles/cloudbuild.builds.builder"
-  member  = "serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"
-  depends_on = [google_project_service.default["cloudbuild.googleapis.com"]]
+  member  = "serviceAccount:${data.google_project_service_identity.cloudbuild_sa.email}"
 }

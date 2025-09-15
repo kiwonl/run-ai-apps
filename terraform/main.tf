@@ -6,12 +6,12 @@ resource "google_project_service" "default" {
   project = data.google_project.project.project_id
   
   for_each = toset([
+    "cloudbuild.googleapis.com",        # Cloud Build API
+    "artifactregistry.googleapis.com",   # Artifact Registry API
     "dns.googleapis.com",               # Google Cloud DNS API
     "aiplatform.googleapis.com",        # Vertex AI API
     "servicedirectory.googleapis.com",  # Service Directory API
-    "run.googleapis.com",               # Cloud Run API
-    "cloudbuild.googleapis.com",        # Cloud Build API
-    "artifactregistry.googleapis.com"   # Artifact Registry API
+    "run.googleapis.com"                # Cloud Run API
   ])
 
   service            = each.value
