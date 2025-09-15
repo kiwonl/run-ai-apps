@@ -1,52 +1,51 @@
-import vertexai
-from vertexai.generative_models import GenerativeModel, SafetySetting, Part
+from google import genai
+from google.genai import types
 import os
-import sys
 import json
 from flask import Flask, request, render_template
-import logging
+import google.cloud.logging
 
 # Initialize Flask app
 app = Flask(__name__)
 
-# Initialize Vertex AI
-vertexai.init(project=os.getenv("PROJECT_ID"), location=os.getenv("REGION"))
+# Set up Google Cloud Logging
+# This is recommended for running on Google Cloud.
+if "K_SERVICE" in os.environ:
+    client = google.cloud.logging.Client()
+    client.setup_logging()
 
-# Initialize Gemini model
-model = GenerativeModel(os.getenv("GEMINI_MODEL"))
-generation_config = {
-    "max_output_tokens": 8192,
-    "temperature": 1,
-    "top_p": 0.95,
-}
-safety_settings = [
-    SafetySetting(
-        category=SafetySetting.HarmCategory.HARM_CATEGORY_HATE_SPEECH,
-        threshold=SafetySetting.HarmBlockThreshold.OFF,
-    ),
-    SafetySetting(
-        category=SafetySetting.HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
-        threshold=SafetySetting.HarmBlockThreshold.OFF,
-    ),
-    SafetySetting(
-        category=SafetySetting.HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
-        threshold=SafetySetting.HarmBlockThreshold.OFF,
-    ),
-    SafetySetting(
-        category=SafetySetting.HarmCategory.HARM_CATEGORY_HARASSMENT,
-        threshold=SafetySetting.HarmBlockThreshold.OFF,
-    ),
-]
+# Initialize GenAI Client
+# When running on Google Cloud, authentication is handled automatically.
+genai_client = genai.Client(vertexai=True)
+
+# Configure Gemini model
+generation_config = types.GenerateContentConfig(
+    max_output_tokens=8192,
+    temperature=1,
+    top_p=0.95,
+    safety_settings=[
+        types.SafetySetting(category="HARM_CATEGORY_HATE_SPEECH", threshold="OFF"),
+        types.SafetySetting(
+            category="HARM_CATEGORY_DANGEROUS_CONTENT", threshold="OFF"
+        ),
+        types.SafetySetting(
+            category="HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold="OFF"
+        ),
+        types.SafetySetting(category="HARM_CATEGORY_HARASSMENT", threshold="OFF"),
+    ],
+)
 
 
 # Function to get movie recommendations from Vertex AI
 def vertex_movie_recommendation(movies, scenario):
-    chat = model.start_chat()
-    response = chat.send_message(
-        f"""당신은 영화 전문가 입니다. 다음 영화들: {" or ".join(movies)} 중에서, {scenario} 상황에 적합한 영화를 추천해 주세요""",
-        generation_config=generation_config,
-        safety_settings=safety_settings,
-        stream=False,
+    model_name = os.getenv("GEMINI_MODEL")
+    prompt = f"""당신은 영화 전문가 입니다. 다음 영화들: {" or ".join(movies)} 중에서, {scenario} 상황에 적합한 영화를 추천해 주세요"""
+    contents = [types.Content(role="user", parts=[types.Part.from_text(text=prompt)])]
+
+    response = genai_client.models.generate_content(
+        model=model_name,
+        contents=contents,
+        config=generation_config,
     )
     return response.text
 
@@ -56,16 +55,22 @@ def vertex_movie_recommendation(movies, scenario):
 def movie_recommendations():
     movies = request.json["movies"]
     scenario = request.json["scenario"]
-    print(f"Received movies: {movies}, Received scenario: {scenario}", file=sys.stdout)
+    app.logger.info(f"Received movies: {movies}, Received scenario: {scenario}")
 
     try:
         recommendation_response = vertex_movie_recommendation(movies, scenario)
     except Exception as e:
-        print(f"Error occurred: {e}", file=sys.stderr)
-        return json.dumps({"error": str(e)}), 500, {"Content-Type": "application/json; charset=utf-8"}
+        app.logger.error(f"Error occurred: {e}", exc_info=True)
+        return (
+            json.dumps(
+                {"error": "An internal error occurred. Please try again later."}
+            ),
+            500,
+            {"Content-Type": "application/json; charset=utf-8"},
+        )
 
     result = json.dumps({"recommendation": recommendation_response}, ensure_ascii=False)
-    print(f"Result: {result}", file=sys.stdout)
+    app.logger.info(f"Result: {result}")
 
     return result, 200, {"Content-Type": "application/json; charset=utf-8"}
 
@@ -77,9 +82,6 @@ def index():
     return render_template(
         "index-v1.html", revision=os.getenv("K_REVISION"), region=os.getenv("REGION")
     )
-    ##############################################
-    # return render_template('index-v2.html', revision=os.getenv("K_REVISION"), region=os.getenv("REGION"))
-    ##############################################
 
 
 # healthz

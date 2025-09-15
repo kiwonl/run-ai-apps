@@ -1,5 +1,4 @@
-google-cloud-aiplatform
+google-genai
+google-cloud-logging
 flask
-werkzeug
 gunicorn
-google.auth
