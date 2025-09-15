@@ -1,12 +1,12 @@
-# Run AI Apps Project
+# AI Applications on Cloud Run
 
 This repository contains a collection of AI-powered applications and services designed to run on **Google Cloud Run**. Each sub-project performs an independent function. For more details, please refer to the `README.md` file for each project.
 
 ## Project Structure
 
-*   **[terraform](./terraform/)**: Contains all the Terraform scripts for provisioning the Google Cloud infrastructure for the projects.
+*   **[terraform](./terraform/)**: Contains all the Terraform scripts for provisioning the Google Cloud infrastructure for the projects. This setup ensures secure access to Gemini from Cloud Run via Private Service Connect (PSC).
 
-*   **[ai-agent](./ai-agent/README.md)**: A sophisticated AI agent that acts as a "Zoo Tour Guide," leveraging a custom MCP server and Wikipedia for information.
+*   **[ai-agent](./ai-agent/README.md)**: A Zoo Tour Guide AI Agent that utilizes an MCP Server deployed on Cloud Run.
     <BR>
     <img src="./images/ai-agent-design.png" width="450">
 
@@ -89,3 +89,5 @@ After provisioning the infrastructure, navigate to the directory of the applicat
 *   **[ai-agent](./ai-agent/README.md)**: A sophisticated AI agent that acts as a "Zoo Tour Guide," leveraging a custom MCP server and Wikipedia for information.    
 *   **[gemini-app](./gemini-app/README.md)**: A web application that provides movie recommendations using Google's Gemini model.
     
+## Reference
+* [Using Private Service Connect for Google APIs to Access Gemini over a Hybrid Connection](https://codelabs.developers.google.com/cloudnet-psc-hybridGemini?hl=en#10)
