@@ -1,3 +1,5 @@
+data "google_project" "project" {}
+
 # Cloud Run 을 위한 Google Cloud 서비스 계정을 생성
 resource "google_service_account" "sa" {
   project      = var.project_id
@@ -23,19 +25,19 @@ resource "google_project_iam_member" "run_invoker" {
 resource "google_project_iam_member" "cloud_build_run_admin" {
   project = var.project_id
   role    = "roles/run.admin"
-  member  = "serviceAccount:${data.google_project.project.number}-compute@developer.gserviceaccount.com"
+  member  = "serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"
 }
 
 # Cloud Build 서비스 계정에 서비스 계정 사용자 역할을 부여합니다.
 resource "google_project_iam_member" "cloud_build_service_account_user" {
   project = var.project_id
   role    = "roles/iam.serviceAccountUser"
-  member  = "serviceAccount:${data.google_project.project.number}-compute@developer.gserviceaccount.com"
+  member  = "serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"
 }
 
 # Cloud Build 서비스 계정에 작업을 실행할 권한을 부여합니다.
 resource "google_project_iam_member" "cloud_build_builds_builder" {
   project = var.project_id
   role    = "roles/cloudbuild.builds.builder"
-  member  = "serviceAccount:${data.google_project.project.number}-compute@developer.gserviceaccount.com"
+  member  = "serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"
 }
