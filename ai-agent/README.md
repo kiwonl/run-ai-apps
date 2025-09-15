@@ -29,7 +29,32 @@ This project provides a comprehensive setup for deploying a sophisticated AI age
     export SERVICE_ACCOUNT=run-ai-apps-sa
     ```
 
-2.  **Deploy the Zoo MCP Server:**
+2.  **Grant Deployer Permissions (One-time setup for your account):**
+
+The user account running `gcloud run deploy` needs permissions to deploy services, assign service accounts, and use Cloud Build behind the scenes. Run the following commands to grant these roles to your currently logged-in `gcloud` user.
+
+    ```bash
+    # Set variables for the current user and project
+    MEMBER=$(gcloud config get-value account)
+    PROJECT_ID=$(gcloud config get-value project)
+
+    # Grant permissions to deploy and manage Cloud Run services
+    gcloud projects add-iam-policy-binding $PROJECT_ID \
+        --member="user:$MEMBER" \
+        --role="roles/run.admin"
+
+    # Grant permission to associate a service account with a Cloud Run service
+    gcloud projects add-iam-policy-binding $PROJECT_ID \
+        --member="user:$MEMBER" \
+        --role="roles/iam.serviceAccountUser"
+
+    # Grant permission to trigger builds from the uploaded source code
+    gcloud projects add-iam-policy-binding $PROJECT_ID \
+        --member="user:$MEMBER" \
+        --role="roles/cloudbuild.builds.editor"
+    ```
+
+3.  **Deploy the Zoo MCP Server:**
 
     This command builds the container image from the source code and deploys it to Cloud Run.
 
@@ -45,12 +70,12 @@ This project provides a comprehensive setup for deploying a sophisticated AI age
         --ingress internal
     ```
 
-3. **Update the .env file:**
+43. **Update the .env file:**
     ```bash
     echo -e "\nMCP_SERVER_URL=https://zoo-mcp-server-${PROJECT_NUMBER}.${REGION}.run.app/mcp/" >> .env
     ```
 
-4.  **Install the Google ADK in your local environment:**
+5.  **Install the Google ADK in your local environment:**
 
     See: [ADK Installation Guide](https://google.github.io/adk-docs/get-started/installation/)
     ```bash
@@ -59,7 +84,7 @@ This project provides a comprehensive setup for deploying a sophisticated AI age
     pip install google-adk
     ```
 
-5.  **Deploy the AI Agent:**
+6.  **Deploy the AI Agent:**
 
     When prompted `Allow unauthenticated invocations to [zoo-tour-guide] (y/N)?`, answer `y`.
     ```bash
@@ -71,7 +96,7 @@ This project provides a comprehensive setup for deploying a sophisticated AI age
       .
     ```
 
-6.  **Update Network Settings for the AI Agent:**
+7.  **Update Network Settings for the AI Agent:**
 
     Apply Direct VPC Egress to the agent's Cloud Run service.
     ```bash

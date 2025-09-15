@@ -65,7 +65,7 @@ The Terraform scripts in the `terraform` directory create the following Google C
 
 -   **`google_project_service`**: Enables necessary Google Cloud APIs for the project, including Cloud Run, Vertex AI, Cloud DNS, Service Directory, Cloud Build, and Artifact Registry.
 -   **`google_service_account`**: Creates a dedicated service account (`run-ai-apps-sa`) for the Cloud Run services to interact with other Google Cloud services securely.
--   **`google_project_iam_member`**: Assigns necessary IAM roles to the service accounts, granting permissions for AI Platform, Cloud Run, and Cloud Build.
+-   **`google_project_iam_member`**: Assigns necessary IAM roles to the Cloud Run runtime service account, such as `roles/aiplatform.user`, allowing it to interact with other Google Cloud services.
 -   **`google_compute_network`**: Creates a custom Virtual Private Cloud (VPC) network (`run-ai-apps-network`) to provide a secure and isolated environment for the services.
 -   **`google_compute_subnetwork`**: Creates a subnetwork (`run-ai-apps-subnet`) within the VPC.
 -   **`google_compute_router`**: Creates a Cloud Router to manage dynamic routing for the VPC network.
@@ -73,7 +73,7 @@ The Terraform scripts in the `terraform` directory create the following Google C
 -   **`google_compute_global_address`**: Reserves a global internal IP address for Private Service Connect (PSC) to enable private access to Google APIs.
 -   **`google_compute_global_forwarding_rule`**: Creates a forwarding rule to direct traffic from the reserved IP address to Google APIs via PSC.
 -   **`google_dns_managed_zone`**: Creates a private DNS zone for `googleapis.com` to resolve Google API domain names to the PSC endpoint.
---   **`google_dns_record_set`**: Creates DNS records within the private zone to point to the PSC endpoint.
+-   **`google_dns_record_set`**: Creates DNS records within the private zone to point to the PSC endpoint.
 
 ## Deployment
 After provisioning the infrastructure, navigate to the directory of the application you wish to deploy and follow the instructions in its respective `README.md` file.
