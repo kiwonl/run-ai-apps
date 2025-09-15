@@ -16,7 +16,11 @@ if "K_SERVICE" in os.environ:
 
 # Initialize GenAI Client
 # When running on Google Cloud, authentication is handled automatically.
-genai_client = genai.Client(vertexai=True)
+genai_client = genai.Client(
+    vertexai=True,
+    project=os.getenv("PROJECT_ID"),
+    location=os.getenv("REGION"),
+)
 
 # Configure Gemini model
 generation_config = types.GenerateContentConfig(

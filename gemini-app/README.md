@@ -28,7 +28,7 @@ The application is designed to be deployed on **Google Cloud Run**.
     export SERVICE_ACCOUNT=run-ai-apps-sa
 
     # You can choose other Gemini models if you prefer
-    export GEMINI_MODEL=gemini-2.5-flash
+    export GEMINI_MODEL=gemini-2.5-pro
     ```
 
 2.  **Deploy the application:**
