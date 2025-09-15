@@ -21,8 +21,10 @@ This project provides a comprehensive setup for deploying a sophisticated AI age
     cd ./ai-agent
 
     export PROJECT_ID=<your-gcp-project-id>
-    export PROJECT_NUMBER=$(gcloud projects describe $PROJECT_ID --format="value(projectNumber)")
     export REGION=us-central1
+
+    export PROJECT_NUMBER=$(gcloud projects describe $PROJECT_ID --format="value(projectNumber)")
+    export UserName=<your-gcp-project-id>
 
     export NETWORK_NAME=run-ai-apps-network
     export SUBNET_NAME=run-ai-apps-subnet
@@ -34,10 +36,6 @@ This project provides a comprehensive setup for deploying a sophisticated AI age
 The user account running `gcloud run deploy` needs permissions to deploy services, assign service accounts, and use Cloud Build behind the scenes. Run the following commands to grant these roles to your currently logged-in `gcloud` user.
 
     ```bash
-    # Set variables for the current user and project
-    MEMBER=$(gcloud config get-value account)
-    PROJECT_ID=$(gcloud config get-value project)
-
     # Grant permissions to deploy and manage Cloud Run services
     gcloud projects add-iam-policy-binding $PROJECT_ID \
         --member="user:$MEMBER" \

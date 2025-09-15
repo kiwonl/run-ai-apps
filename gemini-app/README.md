@@ -37,7 +37,7 @@ The application is designed to be deployed on **Google Cloud Run**.
 
     ```bash
     gcloud run deploy gemini-movie-app \
-        --source .
+        --source . \
         --region ${REGION} \
         --service-account ${SERVICE_ACCOUNT}@${PROJECT_ID}.iam.gserviceaccount.com \
         --allow-unauthenticated \

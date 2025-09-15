@@ -14,6 +14,7 @@ mcp = FastMCP("Zoo Animal MCP Server 🦁🐧🐻")
 ZOO_ANIMALS = [
     {
         "species": "lion",
+        "species_kr": "사자",
         "name": "Leo",
         "age": 7,
         "enclosure": "The Big Cat Plains",
@@ -21,6 +22,7 @@ ZOO_ANIMALS = [
     },
     {
         "species": "lion",
+        "species_kr": "사자",
         "name": "Nala",
         "age": 6,
         "enclosure": "The Big Cat Plains",
@@ -28,6 +30,7 @@ ZOO_ANIMALS = [
     },
     {
         "species": "lion",
+        "species_kr": "사자",
         "name": "Simba",
         "age": 3,
         "enclosure": "The Big Cat Plains",
@@ -35,6 +38,7 @@ ZOO_ANIMALS = [
     },
     {
         "species": "lion",
+        "species_kr": "사자",
         "name": "King",
         "age": 8,
         "enclosure": "The Big Cat Plains",
@@ -42,6 +46,7 @@ ZOO_ANIMALS = [
     },
     {
         "species": "penguin",
+        "species_kr": "펭귄",
         "name": "Waddles",
         "age": 2,
         "enclosure": "The Arctic Exhibit",
@@ -49,6 +54,7 @@ ZOO_ANIMALS = [
     },
     {
         "species": "penguin",
+        "species_kr": "펭귄",
         "name": "Pip",
         "age": 4,
         "enclosure": "The Arctic Exhibit",
@@ -56,6 +62,7 @@ ZOO_ANIMALS = [
     },
     {
         "species": "penguin",
+        "species_kr": "펭귄",
         "name": "Skipper",
         "age": 5,
         "enclosure": "The Arctic Exhibit",
@@ -63,6 +70,7 @@ ZOO_ANIMALS = [
     },
     {
         "species": "penguin",
+        "species_kr": "펭귄",
         "name": "Chilly",
         "age": 3,
         "enclosure": "The Arctic Exhibit",
@@ -70,6 +78,7 @@ ZOO_ANIMALS = [
     },
     {
         "species": "penguin",
+        "species_kr": "펭귄",
         "name": "Pingu",
         "age": 6,
         "enclosure": "The Arctic Exhibit",
@@ -77,6 +86,7 @@ ZOO_ANIMALS = [
     },
     {
         "species": "penguin",
+        "species_kr": "펭귄",
         "name": "Noot",
         "age": 1,
         "enclosure": "The Arctic Exhibit",
@@ -84,6 +94,7 @@ ZOO_ANIMALS = [
     },
     {
         "species": "elephant",
+        "species_kr": "코끼리",
         "name": "Ellie",
         "age": 15,
         "enclosure": "The Pachyderm Sanctuary",
@@ -91,6 +102,7 @@ ZOO_ANIMALS = [
     },
     {
         "species": "elephant",
+        "species_kr": "코끼리",
         "name": "Peanut",
         "age": 12,
         "enclosure": "The Pachyderm Sanctuary",
@@ -98,6 +110,7 @@ ZOO_ANIMALS = [
     },
     {
         "species": "elephant",
+        "species_kr": "코끼리",
         "name": "Dumbo",
         "age": 5,
         "enclosure": "The Pachyderm Sanctuary",
@@ -105,6 +118,7 @@ ZOO_ANIMALS = [
     },
     {
         "species": "elephant",
+        "species_kr": "코끼리",
         "name": "Trunkers",
         "age": 10,
         "enclosure": "The Pachyderm Sanctuary",
@@ -112,13 +126,16 @@ ZOO_ANIMALS = [
     },
     {
         "species": "bear",
+        "species_kr": "곰",
         "name": "Smokey",
         "age": 10,
         "enclosure": "The Grizzly Gulch",
         "trail": "Polar Path",
+which
     },
     {
         "species": "bear",
+        "species_kr": "곰",
         "name": "Grizzly",
         "age": 8,
         "enclosure": "The Grizzly Gulch",
@@ -126,6 +143,7 @@ ZOO_ANIMALS = [
     },
     {
         "species": "bear",
+        "species_kr": "곰",
         "name": "Barnaby",
         "age": 6,
         "enclosure": "The Grizzly Gulch",
@@ -133,6 +151,7 @@ ZOO_ANIMALS = [
     },
     {
         "species": "bear",
+        "species_kr": "곰",
         "name": "Bruin",
         "age": 12,
         "enclosure": "The Grizzly Gulch",
@@ -140,6 +159,7 @@ ZOO_ANIMALS = [
     },
     {
         "species": "giraffe",
+        "species_kr": "기린",
         "name": "Gerald",
         "age": 4,
         "enclosure": "The Tall Grass Plains",
@@ -147,6 +167,7 @@ ZOO_ANIMALS = [
     },
     {
         "species": "giraffe",
+        "species_kr": "기린",
         "name": "Longneck",
         "age": 5,
         "enclosure": "The Tall Grass Plains",
@@ -154,6 +175,7 @@ ZOO_ANIMALS = [
     },
     {
         "species": "giraffe",
+        "species_kr": "기린",
         "name": "Patches",
         "age": 3,
         "enclosure": "The Tall Grass Plains",
@@ -161,6 +183,7 @@ ZOO_ANIMALS = [
     },
     {
         "species": "giraffe",
+        "species_kr": "기린",
         "name": "Stretch",
         "age": 6,
         "enclosure": "The Tall Grass Plains",
@@ -168,6 +191,7 @@ ZOO_ANIMALS = [
     },
     {
         "species": "antelope",
+        "species_kr": "영양",
         "name": "Speedy",
         "age": 2,
         "enclosure": "The Tall Grass Plains",
@@ -175,6 +199,7 @@ ZOO_ANIMALS = [
     },
     {
         "species": "antelope",
+        "species_kr": "영양",
         "name": "Dash",
         "age": 3,
         "enclosure": "The Tall Grass Plains",
@@ -182,6 +207,7 @@ ZOO_ANIMALS = [
     },
     {
         "species": "antelope",
+        "species_kr": "영양",
         "name": "Gazelle",
         "age": 4,
         "enclosure": "The Tall Grass Plains",
@@ -189,6 +215,7 @@ ZOO_ANIMALS = [
     },
     {
         "species": "antelope",
+        "species_kr": "영양",
         "name": "Swift",
         "age": 5,
         "enclosure": "The Tall Grass Plains",
@@ -196,6 +223,7 @@ ZOO_ANIMALS = [
     },
     {
         "species": "polar bear",
+        "species_kr": "북극곰",
         "name": "Snowflake",
         "age": 7,
         "enclosure": "The Arctic Exhibit",
@@ -203,6 +231,7 @@ ZOO_ANIMALS = [
     },
     {
         "species": "polar bear",
+        "species_kr": "북극곰",
         "name": "Blizzard",
         "age": 5,
         "enclosure": "The Arctic Exhibit",
@@ -210,6 +239,7 @@ ZOO_ANIMALS = [
     },
     {
         "species": "polar bear",
+        "species_kr": "북극곰",
         "name": "Iceberg",
         "age": 9,
         "enclosure": "The Arctic Exhibit",
@@ -217,6 +247,7 @@ ZOO_ANIMALS = [
     },
     {
         "species": "walrus",
+        "species_kr": "바다코끼리",
         "name": "Wally",
         "age": 10,
         "enclosure": "The Walrus Cove",
@@ -224,6 +255,7 @@ ZOO_ANIMALS = [
     },
     {
         "species": "walrus",
+        "species_kr": "바다코끼리",
         "name": "Tusker",
         "age": 12,
         "enclosure": "The Walrus Cove",
@@ -231,6 +263,7 @@ ZOO_ANIMALS = [
     },
     {
         "species": "walrus",
+        "species_kr": "바다코끼리",
         "name": "Moby",
         "age": 8,
         "enclosure": "The Walrus Cove",
@@ -238,6 +271,7 @@ ZOO_ANIMALS = [
     },
     {
         "species": "walrus",
+        "species_kr": "바다코끼리",
         "name": "Flippers",
         "age": 9,
         "enclosure": "The Walrus Cove",
@@ -255,7 +289,7 @@ def get_animals_by_species(species: str) -> List[Dict[str, Any]]:
     or finding the oldest lion.
 
     Args:
-        species: The species of the animal (e.g., 'lion', 'penguin').
+        species: The species of the animal (e.g., 'lion', 'penguin', '사자', '펭귄').
 
     Returns:
         A list of dictionaries, where each dictionary represents an animal
@@ -263,7 +297,10 @@ def get_animals_by_species(species: str) -> List[Dict[str, Any]]:
     """
     logger.info(f">>> 🛠️ Tool: 'get_animals_by_species' called for '{species}'")
     return [
-        animal for animal in ZOO_ANIMALS if animal["species"].lower() == species.lower()
+        animal
+        for animal in ZOO_ANIMALS
+        if animal["species"].lower() == species.lower()
+        or animal["species_kr"].lower() == species.lower()
     ]
 
 
@@ -276,7 +313,7 @@ def get_animal_details(name: str) -> Dict[str, Any]:
         name: The name of the animal.
 
     Returns:
-        A dictionary with the animal's details (species, name, age, enclosure, trail)
+        A dictionary with the animal's details (species, species_kr, name, age, enclosure, trail)
         or an empty dictionary if the animal is not found.
     """
     logger.info(f">>> 🛠️ Tool: 'get_animal_details' called for '{name}'")
