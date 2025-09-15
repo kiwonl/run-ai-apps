@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: ${K8S_SERVICE_ACCOUNT}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: mr-app
+ labels:
+   app: mr-app
+spec:
+ replicas: 1
+ selector:
+   matchLabels:
+     app: mr-app
+ template:
+   metadata:
+     labels:
+       app: mr-app
+   spec:
+     containers:
+     - name: mr-app
+       image: ${REGION}-docker.pkg.dev/${PROJECT_ID}/docker-repo/movie-recommendation
+       ports:
+       - containerPort: 8080
+       readinessProbe:
+         httpGet:
+           path: /healthz
+           port: 8080
+         initialDelaySeconds: 60
+         periodSeconds: 10
+       env:
+       - name: PROJECT_ID
+         value: ${PROJECT_ID}
+       - name: REGION
+         value: ${REGION}
+       - name: GEMINI_MODEL
+         value: ${GEMINI_MODEL}
+     serviceAccountName: ${K8S_SERVICE_ACCOUNT}
+---
+apiVersion: v1
+kind: Service
+metadata:
+ name: mr-app-svc
+spec:
+ selector:
+   app: mr-app
+ ports:
+ - protocol: TCP
+   port: 80
+   targetPort: 8080
+ type: LoadBalancer
