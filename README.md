@@ -4,8 +4,80 @@ This repository contains a collection of AI-powered applications and services de
 
 ## Project Structure
 
-*   **[ai-agent](./ai-agent/README.md)**: An application related to AI agents on Cloud Run
-*   **[gemini-app](./gemini-app/README.md)**: A web application utilizing the Gemini model on Cloud Run
-*   **[mcp-server](./mcp-server/README.md)**: The MCP (Model Control Program) server on Cloud Run
+*   **[ai-agent](./ai-agent/README.md)**: A sophisticated AI agent that acts as a "Zoo Tour Guide," leveraging a custom MCP server and Wikipedia for information.
+*   **[gemini-app](./gemini-app/README.md)**: A web application that provides movie recommendations using Google's Gemini model.
+*   **[mcp-server](./mcp-server/README.md)**: A generic MCP (Model Control Program) server that can be used as a foundation for building custom AI tools.
+*   **[terraform](./terraform/)**: Contains all the Terraform scripts for provisioning the Google Cloud infrastructure for the projects.
 
-Detailed descriptions, setup instructions, and execution methods for each project can be found via the `README.md` links for each project.
+## Installation
+
+1.  **Set up environment variables:**
+
+    The following instructions assume you start from the root of the `run-ai-apps` directory.
+
+    ```bash
+    export PROJECT_ID=<your-gcp-project-id>
+    export PROJECT_NUMBER=$(gcloud projects describe $PROJECT_ID --format="value(projectNumber)")
+    export REGION=us-central1
+
+    cd terraform
+    ```
+
+2.  **Update `terraform.tfvars`:**
+
+    ```bash
+    sed -i \
+    -e "s/your-gcp-project-id/$PROJECT_ID/"
+    -e "s/your-region/$REGION/"
+    terraform.tfvars
+    ```
+
+3.  **Initialize and apply Terraform:**
+
+    ```bash
+    terraform init
+    terraform plan
+    terraform apply --auto-approve
+    ```
+
+    Take note of the outputs for Copy
+    ```
+    Outputs:
+
+    network_name = "run-ai-apps-network"
+    subnetwork_name = "run-ai-apps-subnet"
+    service_account_account_id = "run-ai-apps-sa"
+    ```
+
+4.  **Set up environment variables from terraform output**
+
+    ```bash   
+    cd ..
+
+    export NETWORK_NAME=run-ai-apps-network
+    export SUBNET_NAME=run-ai-apps-subnet
+    export SERVICE_ACCOUNT=run-ai-apps-sa
+    ```
+
+
+## Terraform Resources
+
+The Terraform scripts in the `terraform` directory create the following Google Cloud resources:
+
+-   **`google_project_service`**: Enables necessary Google Cloud APIs for the project, including Cloud Run, Vertex AI, Cloud DNS, Service Directory, Cloud Build, and Artifact Registry.
+-   **`google_service_account`**: Creates a dedicated service account (`run-ai-apps-sa`) for the Cloud Run services to interact with other Google Cloud services securely.
+-   **`google_project_iam_member`**: Assigns necessary IAM roles to the service accounts, granting permissions for AI Platform, Cloud Run, and Cloud Build.
+-   **`google_compute_network`**: Creates a custom Virtual Private Cloud (VPC) network (`run-ai-apps-network`) to provide a secure and isolated environment for the services.
+-   **`google_compute_subnetwork`**: Creates a subnetwork (`run-ai-apps-subnet`) within the VPC.
+-   **`google_compute_router`**: Creates a Cloud Router to manage dynamic routing for the VPC network.
+-   **`google_compute_router_nat`**: Creates a Cloud NAT gateway to allow instances without external IP addresses to access the internet.
+-   **`google_compute_global_address`**: Reserves a global internal IP address for Private Service Connect (PSC) to enable private access to Google APIs.
+-   **`google_compute_global_forwarding_rule`**: Creates a forwarding rule to direct traffic from the reserved IP address to Google APIs via PSC.
+-   **`google_dns_managed_zone`**: Creates a private DNS zone for `googleapis.com` to resolve Google API domain names to the PSC endpoint.
+--   **`google_dns_record_set`**: Creates DNS records within the private zone to point to the PSC endpoint.
+
+## Deployment
+After provisioning the infrastructure, navigate to the directory of the application you wish to deploy and follow the instructions in its respective `README.md` file.
+*   **[ai-agent](./ai-agent/README.md)**: A sophisticated AI agent that acts as a "Zoo Tour Guide," leveraging a custom MCP server and Wikipedia for information.
+*   **[gemini-app](./gemini-app/README.md)**: A web application that provides movie recommendations using Google's Gemini model.
+*   **[mcp-server](./mcp-server/README.md)**: A generic MCP (Model Control Program) server that can be used as a foundation for building custom AI tools.

@@ -16,14 +16,14 @@ variable "region" {
 variable "network_id" {
   type        = string
   description = "The ID of the VPC network."
-  default     = "run-genai-app-vpc"
+  default     = "run-ai-apps-network"
 }
 
 # Variable for the subnetwork name
 variable "subnet_name" {
   type        = string
   description = "The name of the subnetwork."
-  default     = "run-genai-app-subnet"
+  default     = "run-ai-apps-subnet"
 }
 
 # Variable for the subnetwork CIDR
@@ -37,5 +37,5 @@ variable "subnet_cidr" {
 variable "run_service_account" {
   type        = string
   description = "The ID of the service account."
-  default     = "run-genai-app-sa"
+  default     = "run-ai-apps-sa"
 }

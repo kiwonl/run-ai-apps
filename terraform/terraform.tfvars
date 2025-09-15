@@ -7,13 +7,15 @@ project_id = "your-gcp-project-id"
 region = "us-central1"
 
 # VPC Network ID
-network_id = "run-genai-app-network"
+network_id = "run-ai-apps-network"
 
 # Subnetwork Name
-subnet_name = "run-genai-app-subnet"
+subnet_name = "run-ai-apps-subnet"
 
 # Subnetwork CIDR
-subnet_cidr = "192.168.104.0/24"
+subnet_cidr = "192.168.100.0/24"
 
 # Service Account ID
-run_service_account = "run-genai-app-sa"
+run_service_account = "run-ai-apps-sa"
+
+
