@@ -1,4 +1,4 @@
-data "google_project" "project" {}
+
 
 # Cloud Run 을 위한 Google Cloud 서비스 계정을 생성
 resource "google_service_account" "sa" {
