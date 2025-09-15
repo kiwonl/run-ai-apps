@@ -62,7 +62,7 @@ def movie_recommendations():
         recommendation_response = vertex_movie_recommendation(movies, scenario)
     except Exception as e:
         print(f"Error occurred: {e}", file=sys.stderr)
-        return e, 500
+        return json.dumps({"error": str(e)}), 500, {"Content-Type": "application/json; charset=utf-8"}
 
     result = json.dumps({"recommendation": recommendation_response}, ensure_ascii=False)
     print(f"Result: {result}", file=sys.stdout)
