@@ -26,7 +26,8 @@ cloud_logging_client.setup_logging()
 
 load_dotenv()
 
-model_name = os.getenv("MODEL")
+model_name = os.getenv("MODEL", "gemini-2.5-flash")
+
 
 # Greet user and save their prompt
 def add_prompt_to_state(tool_context: ToolContext, prompt: str) -> dict[str, str]:

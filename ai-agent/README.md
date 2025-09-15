@@ -4,6 +4,8 @@
 
 This project provides a comprehensive setup for deploying a sophisticated AI agent on Google Cloud. The agent is designed to be a "Zoo Tour Guide," capable of answering questions about animals in a fictional zoo. It leverages a custom-built MCP (Multi-turn Conversation Platform) server for zoo-specific data and Wikipedia for general knowledge. The entire infrastructure is managed using Terraform, and the agent is deployed on Cloud Run.
 
+![ai-agent-design](images/design.png)
+
 ## Features
 
 - **AI Agent:** A conversational AI agent built with the Google ADK (Agent Development Kit).
@@ -72,14 +74,14 @@ The following resources are created by Terraform:
     ```bash
     terraform init
     terraform plan
-    terraform apply
+    terraform apply --auto-approve
     ```
 
     Take note of the outputs.
     ```
     Outputs:
 
-    network_name = "run-ai-agent-vpc"
+    network_name = "run-ai-agent-vpc"다ㅔ
     service_account_account_id = "run-ai-agent-sa"
     subnetwork_name = "run-ai-agent-subnet"
     ```
@@ -131,11 +133,13 @@ The following resources are created by Terraform:
     adk deploy cloud_run \
       --project=${PROJECT_ID} \
       --region=${REGION} \
-      --service_name=zoo-tour-guide \
+      --service_name=zoo-tour-guide-agent \
       --with_ui \
       .
 
-    gcloud run services update zoo-tour-guide \
+6.  Cloud Run 에 배포된 AI Agent 에 Network 설정 업데이트(Direct vpc egress 적용)
+    ```bash
+    gcloud run services update zoo-tour-guide-agent \
       --region=${REGION} \
       --service-account ${SERVICE_ACCOUNT} \
       --network=${NETWORK_NAME} \
@@ -148,7 +152,7 @@ https://codelabs.developers.google.com/codelabs/cloud-run/use-mcp-server-on-clou
 
 ![AI Agent UI](images/result.png)
 
-## References
+## AI Agent Source Code References 
 
 - [MCP Server Codelab](https://codelabs.developers.google.com/codelabs/cloud-run/how-to-deploy-a-secure-mcp-server-on-cloud-run?hl=ko#6)
 - [AI Agent Codelab](https://codelabs.developers.google.com/codelabs/cloud-run/use-mcp-server-on-cloud-run-with-an-adk-agent?hl=ko#0)

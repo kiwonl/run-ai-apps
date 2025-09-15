@@ -1,5 +1,3 @@
-
-
 # Cloud Run 을 위한 Google Cloud 서비스 계정을 생성
 resource "google_service_account" "sa" {
   project      = var.project_id

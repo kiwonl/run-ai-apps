@@ -1,138 +1,127 @@
-# Movie Recommendation AI Agent
+# Gemini Movie Recommendation App
 
-This project is a movie recommendation AI agent that uses Google's Gemini model to provide movie recommendations based on user input. The application can be deployed to either Google Kubernetes Engine (GKE) or Cloud Run.
+## Overview
+
+This project is a movie recommendation web application that uses Google's Gemini model. Users can input a list of movies and a scenario, and the AI will recommend the most suitable movie.
+
+The application is designed to be deployed on **Google Cloud Run**.
 
 ## Key Components
 
-*   **AI Agent:** A Python application using the Gemini Large Language Model to generate movie recommendations.
-*   **Deployment:** Options for deploying the application on both GKE and Cloud Run.
-*   **Infrastructure as Code:** Terraform scripts to provision the necessary Google Cloud resources.
+*   **Web Application:** A Python Flask application that serves a web interface and a REST API for recommendations.
+*   **AI Model:** Utilizes Google's Gemini model via Vertex AI to generate movie recommendations.
+*   **Infrastructure as Code:** Terraform scripts to provision the necessary Google Cloud resources (VPC Network, Service Account, etc.).
 
 ## Getting Started
 
-### Prerequisites
+Follow these steps to set up, provision, and deploy the application. All commands should be run from the `gemini-app` directory.
 
-*   A Google Cloud project.
-*   `gcloud` CLI installed and configured.
-*   `kubectl` installed.
-*   `git` installed.
+### 1. Prerequisites
 
-### 1. Environment Setup
+*   [Google Cloud SDK](https://cloud.google.com/sdk/docs/install) installed and authenticated.
+*   [Terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli) installed.
 
-#### Activate Services
-```
-gcloud services enable \
- cloudbuild.googleapis.com \
- aiplatform.googleapis.com \
- run.googleapis.com \
- container.googleapis.com \
- artifactregistry.googleapis.com \
- --project $PROJECT_ID
-```
+### 2. Infrastructure Setup (Terraform)
 
-#### Set Environment Variables
-```
-export PROJECT_ID=$GOOGLE_CLOUD_PROJECT
-export REGION=us-central1
+First, set up the necessary infrastructure using Terraform.
 
-export CLUSTER=mr-gke
+1.  **Set environment variables:**
 
-export K8S_SERVICE_ACCOUNT=mr-ksa
-export GCP_SERVICE_ACCOUNT=mr-gsa
+    Replace `<your-gcp-project-id>` with your actual Google Cloud Project ID.
 
-export GEMINI_MODEL=gemini-1.5-flash-002
-```
+    ```bash
+    export PROJECT_ID=<your-gcp-project-id>
+    export REGION=us-central1
+    ```
 
-### 2. Build and Deploy
+2.  **Update `terraform.tfvars`:**
 
-#### Clone the repository
-```
-git clone https://github.com/kiwonl/movie-recommendation
-cd ~\/movie-recommendation
-```
+    This command updates the Terraform variables file with your project ID and region.
 
-#### Build the container image
-```
-gcloud artifacts repositories create docker-repo \
-  --repository-format=docker \
-  --location=$REGION \
-  --description="Docker repository" \
-  --project=$PROJECT_ID
+    ```bash
+    cd terraform && \
+    sed -i \
+    -e "s/your-gcp-project-id/$PROJECT_ID/" \
+    -e "s/your-region/$REGION/" \
+    terraform.tfvars
+    ```
 
-gcloud builds submit --tag=${REGION}-docker.pkg.dev/${PROJECT_ID}/docker-repo/movie-recommendation
-```
+3.  **Initialize and apply Terraform:**
 
-### 3. Deployment Options
+    This will provision the resources defined in the `.tf` files.
 
-You can deploy the application to either GKE or Cloud Run.
+    ```bash
+    terraform init
+    terraform plan
+    terraform apply --auto-approve
+    ```
 
-#### Option A: Deploy to Google Kubernetes Engine (GKE)
+    After applying, Terraform will output the names of the created resources. Take note of these for the next step.
 
-##### Create GKE Cluster
-```
-gcloud container clusters create-auto $CLUSTER \
-    --location=$REGION --async
-```
+    ```
+    Outputs:
 
-##### Authenticate to GKE Cluster
-```
-gcloud container clusters get-credentials $CLUSTER --region $REGION
-```
+    network_name = "gemini-app-vpc"
+    service_account_account_id = "gemini-app-sa"
+    subnetwork_name = "gemini-app-subnet"
+    ```
 
-##### Configure and Deploy to GKE
-```
-sed -i 's/${K8S_SERVICE_ACCOUNT}/'${K8S_SERVICE_ACCOUNT}'/g' k8s.yaml
-sed -i 's/${REGION}/'${REGION}'/g' k8s.yaml
-sed -i 's/${PROJECT_ID}/'${PROJECT_ID}'/g' k8s.yaml
-sed -i 's/${GEMINI_MODEL}/'${GEMINI_MODEL}'/g' k8s.yaml
+### 3. Application Deployment (Cloud Run)
 
-# Workload Identity Federation for GKE
-gcloud iam service-accounts create ${GCP_SERVICE_ACCOUNT} \
- --project ${PROJECT_ID}
+Now, deploy the application to Cloud Run.
 
-gcloud projects add-iam-policy-binding ${PROJECT_ID}  \
- --member "serviceAccount:${GCP_SERVICE_ACCOUNT}@${PROJECT_ID}.iam.gserviceaccount.com"  \
- --role "roles/aiplatform.user"
+1.  **Set deployment environment variables:**
 
-gcloud iam service-accounts add-iam-policy-binding ${GCP_SERVICE_ACCOUNT}@${PROJECT_ID}.iam.gserviceaccount.com \
- --role roles/iam.workloadIdentityUser \
- --member "serviceAccount:${PROJECT_ID}.svc.id.goog[default/${K8S_SERVICE_ACCOUNT}]"
+    Use the outputs from the `terraform apply` command in the previous step.
 
-kubectl annotate serviceaccount ${K8S_SERVICE_ACCOUNT} \
-iam.gke.io/gcp-service-account=${GCP_SERVICE_ACCOUNT}@${PROJECT_ID}.iam.gserviceaccount.com
+    ```bash
+    cd ..
 
-# Deploy
-kubectl apply -f k8s.yaml
-```
+    export NETWORK_NAME=<network_name_from_terraform_output>
+    export SUBNET_NAME=<subnetwork_name_from_terraform_output>
+    export SERVICE_ACCOUNT=<service_account_account_id_from_terraform_output>
 
-##### Test the GKE deployment
-```
-export ENDPOINT=[External-ip of Service]
+    # You can choose other Gemini models if you prefer
+    export GEMINI_MODEL=gemini-1.5-flash
+    ```
 
-curl -X POST -H "Content-Type: application/json" -d '{
-  "movies": ["Despicable Me 4", "Inside Out 2"],
-  "scenario": "가족들과 함께 보기 좋은"
-}' "$ENDPOINT/recommendations"
-```
+2.  **Deploy the application:**
 
-#### Option B: Deploy to Cloud Run
+    This command builds the container image from the source code and deploys it to Cloud Run.
 
-##### Deploy the service
-```
-gcloud run deploy mr-run \
---image ${REGION}-docker.pkg.dev/${PROJECT_ID}/docker-repo/movie-recommendation  \
---region ${REGION}  \
---set-env-vars PROJECT_ID=${PROJECT_ID},REGION=${REGION},GEMINI_MODEL=${GEMINI_MODEL} \
---service-account ${GCP_SERVICE_ACCOUNT}@${PROJECT_ID}.iam.gserviceaccount.com  \
---allow-unauthenticated
-```
+    ```bash
+    gcloud run deploy gemini-movie-app \
+        --source . \
+        --region ${REGION} \
+        --service-account ${SERVICE_ACCOUNT}@${PROJECT_ID}.iam.gserviceaccount.com \
+        --allow-unauthenticated \
+        --set-env-vars PROJECT_ID=${PROJECT_ID},REGION=${REGION},GEMINI_MODEL=${GEMINI_MODEL} \
+        --network=${NETWORK_NAME} \
+        --subnet=${SUBNET_NAME} \
+        --vpc-egress=all-traffic
+    ```
 
-##### Test the Cloud Run deployment
-```
-export ENDPOINT=[Endpoint of Cloud Run Service]
+### 4. Test the Deployment
 
-curl -X POST -H "Content-Type: application/json" -d '{
-  "movies": ["Despicable Me 4", "Inside Out 2"],
-  "scenario": "가족들과 함께 보기 좋은"
-}' "$ENDPOINT/recommendations"
-```
+Once deployed, `gcloud` will provide a service URL. Use this URL to test the API endpoint.
+
+1.  **Set the endpoint URL:**
+
+    Replace `<service-url-from-gcloud-output>` with the actual URL of your Cloud Run service.
+
+    ```bash
+    export ENDPOINT=<service-url-from-gcloud-output>
+    ```
+
+2.  **Send a test request using `curl`:**
+
+    ```bash
+    curl -X POST -H "Content-Type: application/json" -d 
+    {
+      "movies": ["Despicable Me 4", "Inside Out 2", "The Godfather"],
+      "scenario": "가족들과 함께 보기 좋은"
+    }
+    " $ENDPOINT/recommendations"
+    ```
+
+    You should receive a JSON response with a movie recommendation.
