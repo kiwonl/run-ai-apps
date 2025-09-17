@@ -3,7 +3,7 @@ data "google_project" "project" {
 
 # Enable necessary Google Cloud APIs for the project
 resource "google_project_service" "default" {
-  project = data.google_project.project.project_id
+  project = var.project_id
   
   for_each = toset([
     "cloudbuild.googleapis.com",          # Cloud Build API
